@@ -7,23 +7,23 @@ Created on Tue May 22 16:57:31 2018
 
 import numpy as np
 
-class Learning_rate_Error(ValueError):
+class Learning_rate_Error(TypeError):
     pass
 
 
-class Prediction_Label_Error(ValueError):
+class Prediction_Label_Error(TypeError):
     pass
 
 
-class Train_data_Error(ValueError):
+class Train_data_Error(TypeError):
     pass
 
 
-class My_classifier_x_Error(ValueError):
+class My_classifier_x_Error(TypeError):
     pass
 
 
-class My_Y_Error(ValueError):
+class My_Y_Error(TypeError):
     pass
 
 
