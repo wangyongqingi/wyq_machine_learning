@@ -6,11 +6,11 @@ Created on Thu May 24 21:41:58 2018
 """
 
 import numpy as np
-class Data_Match_Error(ValueError):
+class Data_Match_Error(TypeError):
     pass
 
 
-class Test_data_dimension_Error(ValueError):
+class Test_data_dimension_Error(TypeError):
     pass
 
 
