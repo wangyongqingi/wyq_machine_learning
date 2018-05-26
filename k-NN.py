@@ -9,15 +9,15 @@ import numpy as np
 import math
 
 
-class X_Y_train_Error(ValueError):
+class X_Y_train_Error(TypeError):
     pass
 
 
-class Test_train_Error(ValueError):
+class Test_train_Error(TypeError):
     pass
 
 
-class Train_data_Error(ValueError):
+class Train_data_Error(TypeError):
     pass
 
 
