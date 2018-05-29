@@ -9,6 +9,16 @@ import numpy as np
 import math
 
 
+def uniquecounts(rows):
+    copy_rows=rows.copy()
+    results=[]
+    while(len(copy_rows)>0):
+        r=rows[len(copy_rows)-1]
+        if r not in results:
+            results.append(r)
+        copy_rows.pop()
+    return results
+
 class X_Y_train_Error(TypeError):
     pass
 
@@ -22,13 +32,14 @@ class Train_data_Error(TypeError):
 
 
 class KNN(object):
-    def __init__(self,X,Y,test_a,K,distance_chosen,label_type):
+    def __init__(self,X,Y,test_a,K,distance_chosen):
         self.X=X
         self.Y=Y
         self.test_a=test_a
         self.K=K
         self.distance_chosen=distance_chosen
-        self.label_type=label_type
+        copy_y=Y.copy()
+        self.label_type=uniquecounts(copy_y)
         if(len(self.X)!=len(Y)):
             raise X_Y_train_Error('the train data X and predict label Y do not match' )
         if(len(self.X[0])!=len(self.test_a)):
@@ -101,11 +112,10 @@ class KNN(object):
 X=np.array([[7,8],[10,11],[12,9],[6,3],[9,2]])
 Y=[-1,-1,1,1,-1]
 test_a=[5,1] 
-label_type=[1,-1]
 K=3  
 distance_chosen=0     
 if __name__=='__main__':
-    knn=KNN(X,Y,test_a,K,distance_chosen,label_type)
+    knn=KNN(X,Y,test_a,K,distance_chosen)
     print(knn.knn_classifier())               
                 
         
