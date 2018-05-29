@@ -5,7 +5,18 @@ Created on Thu May 24 21:41:58 2018
 @author: wyq
 """
 
-import numpy as np
+
+def uniquecounts(rows):
+    copy_rows=rows.copy()
+    results=[]
+    while(len(copy_rows)>0):
+        r=rows[len(copy_rows)-1]
+        if r not in results:
+            results.append(r)
+        copy_rows.pop()
+    return results
+
+
 class Data_Match_Error(TypeError):
     pass
 
@@ -15,14 +26,19 @@ class Test_data_dimension_Error(TypeError):
 
 
 class Naive_Bayesian(object):
-    def __init__(self,X1,X2,Y,class_X1,class_X2,class_Y):#class_X1 means all the sorts of X1,class_X2 means all the sorts of X2
+    #def __init__(self,X1,X2,Y,class_X1,class_X2,class_Y):#class_X1 means all the sorts of X1,class_X2 means all the sorts of X2
+    def __init__(self,X1,X2,Y):#class_X1 means all the sorts of X1,class_X2 means all the sorts of X2
+
     #class_Y means all the sorts of Y
         self.X1=X1
         self.X2=X2
         self.Y=Y
-        self.class_X1=class_X1
-        self.class_X2=class_X2
-        self.class_Y=class_Y
+        copy_x1=X1.copy()
+        copy_x2=X2.copy()
+        copy_y=Y.copy()
+        self.class_X1=uniquecounts(copy_x1)
+        self.class_X2=uniquecounts(copy_x2)
+        self.class_Y=uniquecounts(copy_y)
         if((len(self.X1)!=len(self.X2)) or(len(self.X1)!=len(self.Y))):
             raise Data_Match_Error('the data does not match')
     
@@ -55,7 +71,6 @@ class Naive_Bayesian(object):
     def Probablity_of_X1_Y(self):
         count_type_y=self.count_type_Y()
         a=len(self.X1)
-        b=len(self.Y)
         c=len(self.class_X1)
         d=len(self.class_Y)
         y=self.Y
@@ -107,6 +122,7 @@ class Naive_Bayesian(object):
         return a,b
     
     def naive_bayesian_result(self,test_data):
+        import numpy as np
         m,n=self.the_order_of_test_data(test_data)
         probablity_of_Y=self.Probablity_of_Y()
         probablity_of_X1_Y=self.Probablity_of_X1_Y()
@@ -125,11 +141,8 @@ if __name__=='__main__':
     X1=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3]
     X2=['s','m','m','s','s','s','m','m','l','l','l','m','m','l','l']
     Y=[-1,-1,1,1,-1,-1,-1,1,1,1,1,1,1,1,-1]
-    class_X1=[1,2,3]
-    class_X2=['s','m','l']
-    class_Y=[-1,1]
     test_data=[2,'s']
-    naive_bayesian=Naive_Bayesian(X1,X2,Y,class_X1,class_X2,class_Y)
+    naive_bayesian=Naive_Bayesian(X1,X2,Y)
     print(naive_bayesian.naive_bayesian_result(test_data))
     
             
@@ -143,4 +156,3 @@ if __name__=='__main__':
         
                 
         
-    
