@@ -51,8 +51,11 @@ class Logistic_Regression(object):
         for i in range(self.n_iteration):
             j=random.randint(0,(n_samples-1))
             h_x=np.dot(x[j],parameters)
-            y_predict=sigmoid(h_x)
-            #parameters_ascent=np.dot(x[j].T,(y_predict-y[j]))*self.learning_rate
+            y_predict_a=sigmoid(h_x)
+            if(y_predict_a>=0.5):
+                y_predict=1
+            elif(y_predict_a<0.5):
+                y_predict=0
             parameters_ascent=np.array(x[j].T*(y_predict-y[j])*self.learning_rate)
             parameters_ascent_T=np.reshape(parameters_ascent,(m_features+1,1))
             parameters=parameters+parameters_ascent_T
@@ -74,7 +77,7 @@ def main():
     data=[[1,2,3,4,5,6],[3,4,5,4,5,6],[5,6,7,4,5,6],[5,8,9,4,5,6],[8,9,5,4,5,6]]
     y=[0,0,0,1,1]
     lr=Logistic_Regression(data,y,learning_rate=0.1,n_iteration=100)
-    a=np.array([5,6,7,4,5,6])
+    a=np.array([8,6,7,4,5,6])
     print(lr.classifier(a))
     
 if __name__=='__main__':
