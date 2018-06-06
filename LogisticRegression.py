@@ -51,7 +51,6 @@ class Logistic_Regression(object):
         self.parameter_initialize()
         x=np.insert(X,0,1,axis=1)
         y=np.reshape(Y,(n_samples,1))
-        m=[0 for x in range(n_samples)]
         for i in range(self.n_iteration):
             j=random.randint(0,(n_samples-1))
             h_x=np.dot(x[j],parameters)
