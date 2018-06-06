@@ -26,7 +26,10 @@ class Logistic_Regression(object):
         self.X=X
         self.Y=Y
         self.learning_rate=learning_rate
-        self.n_iteration=n_iteration
+        if(n_iteration<=len(self.X)):
+            self.n_iteration=n_iteration
+        else:
+            self.n_iteration=len(self.X)
         if(len(self.X)!=len(self.Y)):
             raise X_Y_Match_Error('the train data and label does not match')
         if(type(n_iteration)!=int):
@@ -53,22 +56,9 @@ class Logistic_Regression(object):
             j=random.randint(0,(n_samples-1))
             h_x=np.dot(x[j],parameters)
             y_predict=sigmoid(h_x)
-            if(m[j]==0):
-                parameters_ascent=np.array(x[j].T*(y_predict-y[j])*self.learning_rate)
-                parameters_ascent_T=np.reshape(parameters_ascent,(m_features+1,1))
-                parameters=parameters+parameters_ascent_T
-                m[j]=1
-            else:
-                n=[]
-                for k in range(len(m)):
-                    if(m[k]==0):
-                        n.append(k)
-                l=random.randint(0,(len(n)-1))
-                a=n[l]
-                parameters_ascent=np.array(x[a].T*(y_predict-y[a])*self.learning_rate)
-                parameters_ascent_T=np.reshape(parameters_ascent,(m_features+1,1))
-                parameters=parameters+parameters_ascent_T
-                m[a]=1
+            parameters_ascent=np.array(x[j].T*(y_predict-y[j])*self.learning_rate)
+            parameters_ascent_T=np.reshape(parameters_ascent,(m_features+1,1))
+            parameters=parameters+parameters_ascent_T
         return parameters
 
            
@@ -85,9 +75,9 @@ class Logistic_Regression(object):
         return y
 
 def main():
-    data=[[1,2,3],[3,4,5],[5,6,7],[5,8,9],[8,9,5]]
-    y=[0,0,1,1,1]
-    lr=Logistic_Regression(data,y,learning_rate=0.1,n_iteration=5)
+    data=[[1,2,3],[3,4,5],[5,6,7],[5,8,9],[8,9,5],[2,1,3],[9,7,6],[3,8,9]]
+    y=[0,0,1,1,1,0,1,0]
+    lr=Logistic_Regression(data,y,learning_rate=0.1,n_iteration=10)
     a=np.array([1,2,3])
     print(lr.classifier(a))    
 if __name__=='__main__':
