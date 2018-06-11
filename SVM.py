@@ -29,12 +29,12 @@ class Iteration_ValueError(ValueError):
 
 
 class SVM(object):
-    def __init__(self,X,Y,C,Iteration=1000,epsilon=0.001,kernel='rbf'):
+    def __init__(self,X,Y,C,maxIteration,epsilon=0.001,kernel='rbf'):
         self.X=X
         self.Y=Y
         self.C=500
         self.epsilon=epsilon
-        self.Iteration=Iteration  #迭代次数
+        self.maxIteration=maxIteration  #迭代次数
         self.kernel=kernel
         self.N=len(self.X)  
         self.n=len(self.X[0])
@@ -43,7 +43,7 @@ class SVM(object):
         self.E=[self.calErr(i) for i in range(self.N)]
         if(len(self.X)!=len(self.Y)):
             raise X_Y_Match_Error('the train data and label does not match')
-        if(type(self.Iteration)!=int):
+        if(type(self.maxIteration)!=int):
             raise Iteration_ValueError('the type of n_iteration should be int')
         
     def kernelResult(self,xi,xj):
@@ -72,6 +72,13 @@ class SVM(object):
         else:
             return abs(ygx-1)<self.epsilon
         
+    def KKT_stop_condition(self):
+        for i in range(self.N):
+            satisfy_condition=self.KKT_condition(i)
+            if satisfy_condition==False:
+                return False
+        return True
+        
     def select_two_parameters(self):
         index_list=[i for i in range(self.N)]
         i1_list_1=[]
@@ -99,7 +106,8 @@ class SVM(object):
         return i, max_[1]
     
     def iteration_train(self):#P125 7.4.1 
-        for times in range(self.Iteration):
+        iterate=0
+        while(iterate<self.maxIteration and self.KKT_stop_condition()==False):
             i, j = self.select_two_parameters()
             L = max(0, (self.alpha[j] - self.alpha[i]))
             H = min(self.C, (self.C + self.alpha[j] - self.alpha[i]))
@@ -127,11 +135,12 @@ class SVM(object):
                 b_new = b2_new
             else:
                 b_new = (b1_new + b2_new) / 2
-            self.alpha[i] = alphi_new
-            self.alpha[j] = alphj_new
-            self.b = b_new
-            self.E[i] = self.calErr(i)
-            self.E[j] = self.calErr(j)
+                self.alpha[i] = alphi_new
+                self.alpha[j] = alphj_new
+                self.b = b_new
+                self.E[i] = self.calErr(i)
+                self.E[j] = self.calErr(j)
+            iterate+=1
 
     def predict(self,feature):
         result = self.b
@@ -143,11 +152,10 @@ class SVM(object):
             return -1
 
 def main():
-    X=[[1,2,3],[2,3,4],[3,4,5],[4,5,6]]
-    Y=[1,1,-1,-1]
-    svm=SVM(X,Y,C=500,Iteration=3,epsilon=0.01,kernel='rbf')
+    X=[[1,2,3],[2,3,4],[3,4,5],[4,5,6],[3,4,8],[5,7,7],[7,8,9]]
+    Y=[1,1,-1,-1,-1,1,-1]
+    svm=SVM(X,Y,C=100,maxIteration=100,epsilon=0.1,kernel='rbf')
     svm.iteration_train()
     print(svm.predict([1,2,3]))
-    
 if __name__=='__main__':
     main()
