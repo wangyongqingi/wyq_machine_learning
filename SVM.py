@@ -3,8 +3,7 @@
 Created on Sat Jun  9 14:55:55 2018
 
 @author: wyq
-
-
+       
 """
 
 import numpy as np
@@ -64,10 +63,11 @@ class SVM(object):
         return result
 
     def KKT_condition(self,i):#P130 7.4.3 SMO算法
-        if ((self.Y[i]*self.E[i]<-self.epsilon) and (self.alpha[i]<self.C)) or (((self.Y[i]*self.E[i]>self.epsilon)) and (self.alpha[i]>0)):
+        if ((self.Y[i]*self.E[i]<-self.epsilon) and (self.alpha[i]<self.C)) or \
+        (((self.Y[i]*self.E[i]>self.epsilon)) and (self.alpha[i]>0)):
             return False
         else:
-            return True
+            return True	
         
     def KKT_stop_condition(self):
         for i in range(self.N):
@@ -113,7 +113,8 @@ class SVM(object):
                 H = min(self.C, (self.alpha[j] + self.alpha[i]))
             E1 = self.E[i]
             E2 = self.E[j]
-            eta=self.kernelResult(self.X[i], self.X[i])+self.kernelResult(self.X[j], self.X[j])-2*self.kernelResult(self.X[i], self.X[j])
+            eta=self.kernelResult(self.X[i], self.X[i])+self.kernelResult(self.X[j], self.X[j])-\
+            2*self.kernelResult(self.X[i], self.X[j])
             alphaj_new_unc = self.alpha[j] + self.Y[j] * (E1 - E2) / eta      
             alphj_new = 0
             if alphaj_new_unc > H:
@@ -124,8 +125,10 @@ class SVM(object):
                 alphj_new = alphaj_new_unc            
             alphi_new = self.alpha[i] + self.Y[i] * self.Y[j] * (self.alpha[j] - alphj_new)
             b_new = 0
-            b1_new = -E1 - self.Y[i] * self.kernelResult(self.X[i], self.X[i]) * (alphi_new - self.alpha[i]) - self.Y[j] * self.kernelResult(self.X[j], self.X[i]) * (alphj_new - self.alpha[j]) + self.b
-            b2_new = -E2 - self.Y[i] * self.kernelResult(self.X[i], self.X[j]) * (alphi_new - self.alpha[i]) - self.Y[j] * self.kernelResult(self.X[j], self.X[j]) * (alphj_new - self.alpha[j]) + self.b
+            b1_new = -E1 - self.Y[i] * self.kernelResult(self.X[i], self.X[i]) * (alphi_new - self.alpha[i]) - self.Y[j] \
+            * self.kernelResult(self.X[j], self.X[i]) * (alphj_new - self.alpha[j]) + self.b
+            b2_new = -E2 - self.Y[i] * self.kernelResult(self.X[i], self.X[j]) * (alphi_new - self.alpha[i]) - self.Y[j] \
+            * self.kernelResult(self.X[j], self.X[j]) * (alphj_new - self.alpha[j]) + self.b
             if alphi_new > 0 and alphi_new < self.C:
                 b_new = b1_new
             elif alphj_new > 0 and alphj_new < self.C:
@@ -151,7 +154,7 @@ class SVM(object):
 def main():
     X=[[1,2,3],[2,3,4],[3,4,5],[4,5,6],[3,4,8],[5,7,7],[7,8,9]]
     Y=[1,1,-1,-1,-1,1,-1]
-    svm=SVM(X,Y,C=100,maxIteration=100,epsilon=0.1,kernel='rbf')
+    svm=SVM(X,Y,C=10,maxIteration=100,epsilon=0.1,kernel='linear')
     svm.iteration_train()
     print(svm.predict([1,2,3]))
 if __name__=='__main__':
