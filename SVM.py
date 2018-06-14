@@ -64,7 +64,7 @@ class SVM(object):
 
     def KKT_condition(self,i):#P130 7.4.3 SMO算法
         if ((self.Y[i]*self.E[i]<-self.epsilon) and (self.alpha[i]<self.C)) or \
-        (((self.Y[i]*self.E[i]>self.epsilon)) and (self.alpha[i]>0)):
+        ((self.Y[i]*self.E[i]>self.epsilon) and (self.alpha[i]>0)):
             return False
         else:
             return True	
