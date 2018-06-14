@@ -64,13 +64,10 @@ class SVM(object):
         return result
 
     def KKT_condition(self,i):#P130 7.4.3 SMO算法
-        ygx=self.Y[i]*self.g_xi(i)
-        if abs(self.alpha[i])<self.epsilon:
-            return ygx>1 or ygx==1
-        elif abs(self.alpha[i]-self.C)<self.epsilon:
-            return ygx<1 or ygx==1
+        if ((self.Y[i]*self.E[i]<-self.epsilon) and (self.alpha[i]<self.C)) or (((self.Y[i]*self.E[i]>self.epsilon)) and (self.alpha[i]>0)):
+            return False
         else:
-            return abs(ygx-1)<self.epsilon
+            return True
         
     def KKT_stop_condition(self):
         for i in range(self.N):
