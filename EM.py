@@ -6,7 +6,7 @@ Created on Thu Jun 28 19:44:58 2018
 """
 
 #高斯混合模型参数估计的EM算法  9.3
-# 代码参考http://blog.csdn.net/chasdmeng/article/details/38709063
+#代码参考http://blog.csdn.net/chasdmeng/article/details/38709063
 
 import numpy as np
 from math import exp
