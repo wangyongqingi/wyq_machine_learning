@@ -6,6 +6,7 @@ Created on Thu Jun 28 19:44:58 2018
 """
 
 #高斯混合模型参数估计的EM算法  9.3
+#两个高斯分布，均值为Mu1,Mu2,标准差为sigma，精度默认为0.01，迭代次数默认20次。
 
 
 import numpy as np
@@ -60,7 +61,7 @@ class EM(object):
                 Sum += Expectations[j][i]
             self.Mu[i] = Elements/Sum
         
-    def stop_condition(self,Mu):
+    def stop_condition(self,Mu):     #达到精度以下则达到停止条件
         condition = False
         if sum(abs(self.Mu - Mu)) < self.epsilon:
             condition = True
