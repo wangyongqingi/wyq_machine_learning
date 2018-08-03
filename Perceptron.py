@@ -7,7 +7,7 @@ Created on Tue May 22 16:57:31 2018
 
 import numpy as np
 
-class Learning_rate_Error(TypeError):
+class Learning_rate_Error(ValueError):
     pass
 
 
